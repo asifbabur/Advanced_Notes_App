@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "804310177733",
+    "project_id": "notefly-bca80",
+    "storage_bucket": "notefly-bca80.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:804310177733:android:e37593bf89ecb3d8ff1dac",
+        "android_client_info": {
+          "package_name": "com.example.my_notes_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "804310177733-cu3uv5iq482gsjlpdp0vncegutbjkdkh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7_Q3OdPQzVNB-j7ySZ9ILomqAj5sli5U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "804310177733-cu3uv5iq482gsjlpdp0vncegutbjkdkh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

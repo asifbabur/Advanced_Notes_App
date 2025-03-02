@@ -1,0 +1,53 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code settings (optional – uncomment if you want to ignore)
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# iOS and CocoaPods
+ios/Pods/
+ios/Runner.xcworkspace/
+
+# Android Studio build artifacts
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Symbolication and obfuscation related
+app.*.symbols
+app.*.map.json
+
+# Coverage reports
+coverage/
+
+# (Optional) If you decide not to commit generated files, uncomment these:
+#*.freezed.dart
+#*.g.dart
