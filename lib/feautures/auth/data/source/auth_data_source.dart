@@ -19,6 +19,19 @@ class FirebaseAuthDataSource {
     );
   }
 
+  // Email & password registration
+  Future<UserModel> registerWithEmail(String email, String password) async {
+    final credential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
+    final user = credential.user!;
+    return UserModel(
+      uid: user.uid,
+      email: user.email ?? '',
+      displayName: user.displayName ?? '',
+      photoUrl: user.photoURL,
+    );
+  }
+
   // Google sign in
   Future<UserModel> signInWithGoogle() async {
     final googleUser = await _googleSignIn.signIn();

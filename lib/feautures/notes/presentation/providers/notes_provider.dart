@@ -29,5 +29,21 @@ class NotesController extends _$NotesController {
     return await ref.read(notesRepositoryProvider).getNotes().first;
   }
 
-  // Add additional methods here for CRUD (create, update, delete)
+  // Method to add a new note
+  Future<void> addNote(Note note) async {
+    await ref.read(notesRepositoryProvider).createNote(note);
+    state = AsyncValue.data(await ref.read(notesRepositoryProvider).getNotes().first);
+  }
+
+  // Method to update an existing note
+  Future<void> updateNote(Note note) async {
+    await ref.read(notesRepositoryProvider).updateNote(note);
+    state = AsyncValue.data(await ref.read(notesRepositoryProvider).getNotes().first);
+  }
+
+  // Method to delete a note
+  Future<void> deleteNote(String noteId) async {
+    await ref.read(notesRepositoryProvider).deleteNote(noteId);
+    state = AsyncValue.data(await ref.read(notesRepositoryProvider).getNotes().first);
+  }
 }

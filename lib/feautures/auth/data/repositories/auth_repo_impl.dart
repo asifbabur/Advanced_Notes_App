@@ -37,4 +37,10 @@ class AuthRepositoryImpl implements AuthRepository {
       );
     });
   }
+  
+  @override
+  Future<UserModel> registerWithEmailPassword(String email, String password) {
+       return dataSource.registerWithEmail(email, password);
+
+  }
 }

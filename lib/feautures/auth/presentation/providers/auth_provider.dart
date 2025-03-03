@@ -38,6 +38,11 @@ class AuthController extends _$AuthController {
     return await repo.signInWithEmail(email, password);
   }
 
+  Future<UserModel> registerWithEmail(String email, String password) async {
+    final repo = ref.read(authRepositoryProvider);
+    return await repo.registerWithEmailPassword(email, password);
+  }
+
   Future<UserModel> signInWithGoogle() async {
     final repo = ref.read(authRepositoryProvider);
     return await repo.signInWithGoogle();
