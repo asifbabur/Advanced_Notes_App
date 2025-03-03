@@ -42,7 +42,7 @@ class AppRouter {
           if (isLoggedIn &&
               (state.uri.toString() == AuthPage.pagePath ||
                   state.uri.toString() == OnboardingPage.pagePath)) {
-            return '/';
+            return NotesPage.pagePath;
           }
 
           return null;
@@ -56,6 +56,11 @@ class AppRouter {
             path: AuthPage.pagePath,
             builder: (context, state) => const AuthPage(),
           ),
+          GoRoute(
+            path: NotesPage.pagePath,
+            builder: (context, state) => NotesPage(),
+          ),
+
           GoRoute(path: '/', builder: (context, state) => NotesPage()),
         ],
       );

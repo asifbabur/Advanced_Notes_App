@@ -1,150 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:my_notes_flutter/feautures/notes/domain/repositories/notes_repo_impl.dart';
-import 'package:my_notes_flutter/feautures/notes/data/models/note.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:my_notes_flutter/feautures/notes/presentation/providers/notes_provider.dart';
+import 'package:my_notes_flutter/feautures/notes/data/models/note.dart';
+import 'package:my_notes_flutter/feautures/notes/presentation/widgets/note_dialog.dart';
+import 'package:my_notes_flutter/feautures/notes/presentation/widgets/notes_list.dart';
 
 class NotesPage extends ConsumerWidget {
   static const pageName = 'notes';
   static const pagePath = '/notes';
 
+  const NotesPage({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notesAsync = ref.watch(notesControllerProvider);
+    final RefreshController refreshController = RefreshController(
+      initialRefresh: false,
+    );
 
     return Scaffold(
-      appBar: AppBar(title: Text('My Notes')),
+      appBar: AppBar(title: const Text('My Notes')),
       body: notesAsync.when(
         data:
-            (notes) => ListView.builder(
-              itemCount: notes.length,
-              itemBuilder: (context, index) {
-                final note = notes[index];
-                return Card(
-                  child: ListTile(
-                    title: Text(note.content),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () => _editNote(context, ref, note),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () => _deleteNote(ref, note.id),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+            (notes) => NotesList(
+              notes: notes,
+              ref: ref,
+              refreshController: refreshController,
             ),
-        loading: () => Center(child: CircularProgressIndicator()),
+        loading:
+            () => const Center(child: CircularProgressIndicator.adaptive()),
         error: (err, _) => Center(child: Text('Error: $err')),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _addNote(context, ref),
-        child: Icon(Icons.add),
+        onPressed: () => _addNoteDialog(context, ref),
+        child: const Icon(Icons.add),
       ),
     );
   }
 
-  void _addNote(BuildContext context, WidgetRef ref) {
-    TextEditingController titleController = TextEditingController();
-    TextEditingController contentController = TextEditingController();
+  void _addNoteDialog(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text('Add Note'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: titleController,
-                  decoration: InputDecoration(hintText: 'Enter title'),
-                ),
-                SizedBox(height: 8),
-                TextField(
-                  controller: contentController,
-                  decoration: InputDecoration(hintText: 'Enter content'),
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  final title = titleController.text;
-                  final content = contentController.text;
-                  if (title.isNotEmpty && content.isNotEmpty) {
-                    ref
-                        .read(notesControllerProvider.notifier)
-                        .addNote(
-                          Note(
-                            id: DateTime.now().toString(),
-                            title: title,
-                            content: content,
-                          ),
-                        );
-                    Navigator.of(context).pop();
-                  }
-                },
-                child: Text('Add'),
-              ),
-            ],
-          ),
+      builder: (context) => AddEditNoteDialog(ref: ref, isEdit: false),
     );
-  }
-
-  void _editNote(BuildContext context, WidgetRef ref, Note note) {
-    TextEditingController titleController = TextEditingController(
-      text: note.title,
-    );
-    TextEditingController contentController = TextEditingController(
-      text: note.content,
-    );
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text('Edit Note'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: titleController,
-                  decoration: InputDecoration(hintText: 'Enter title'),
-                ),
-                SizedBox(height: 8),
-                TextField(
-                  controller: contentController,
-                  decoration: InputDecoration(hintText: 'Enter content'),
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  final title = titleController.text;
-                  final content = contentController.text;
-                  if (title.isNotEmpty && content.isNotEmpty) {
-                    ref
-                        .read(notesControllerProvider.notifier)
-                        .updateNote(
-                          Note(id: note.id, title: title, content: content),
-                        );
-                    Navigator.of(context).pop();
-                  }
-                },
-                child: Text('Update'),
-              ),
-            ],
-          ),
-    );
-  }
-
-  void _deleteNote(WidgetRef ref, String noteId) {
-    ref.read(notesControllerProvider.notifier).deleteNote(noteId);
   }
 }
