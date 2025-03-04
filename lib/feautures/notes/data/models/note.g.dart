@@ -14,6 +14,9 @@ _Note _$NoteFromJson(Map<String, dynamic> json) => _Note(
       json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
+  tags:
+      (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      const [],
 );
 
 Map<String, dynamic> _$NoteToJson(_Note instance) => <String, dynamic>{
@@ -21,4 +24,5 @@ Map<String, dynamic> _$NoteToJson(_Note instance) => <String, dynamic>{
   'title': instance.title,
   'content': instance.content,
   'createdAt': instance.createdAt?.toIso8601String(),
+  'tags': instance.tags,
 };

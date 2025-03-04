@@ -13,10 +13,11 @@ class NotesList extends StatelessWidget {
   final RefreshController refreshController;
 
   const NotesList({
+    Key? key,
     required this.notes,
     required this.ref,
     required this.refreshController,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +32,9 @@ class NotesList extends StatelessWidget {
       },
       child: ListView.separated(
         physics:
-            AlwaysScrollableScrollPhysics(), // Allows pull even when few items
-        padding: EdgeInsets.all(8),
-        separatorBuilder: (context, index) => SizedBox(height: 15),
+            AlwaysScrollableScrollPhysics(), // ensures pull-to-refresh even with few items
+        padding: const EdgeInsets.all(8),
+        separatorBuilder: (context, index) => const SizedBox(height: 15),
         itemCount: notes.length,
         itemBuilder: (context, index) {
           final note = notes[index];
@@ -46,6 +47,7 @@ class NotesList extends StatelessWidget {
             Colors.deepOrange.shade700,
           ];
           return NoteCard(
+            key: ValueKey(note.id),
             note: note,
             color: colors[index % colors.length],
             ref: ref,
@@ -61,12 +63,17 @@ class NoteCard extends StatelessWidget {
   final Color color;
   final WidgetRef ref;
 
-  const NoteCard({required this.note, required this.color, required this.ref});
+  const NoteCard({
+    Key? key,
+    required this.note,
+    required this.color,
+    required this.ref,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(12),
@@ -75,14 +82,34 @@ class NoteCard extends StatelessWidget {
             color: Colors.black.withOpacity(0.2),
             spreadRadius: 2,
             blurRadius: 5,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
       height: 175,
       child: Stack(
         children: [
+          // Title (using ListTile for simplicity)
           ListTile(title: MyText(note.title)),
+          // Tags: Displayed in a Wrap below the title. Adjust the top offset as needed.
+          Positioned(
+            top: 50,
+            left: 16,
+            right: 16,
+            child: Wrap(
+              spacing: 4.0,
+              runSpacing: 2.0,
+              children:
+                  note.tags.map((tag) {
+                    return Chip(
+                      label: MyText(tag, fontSize: 12),
+                      backgroundColor: Colors.white.withOpacity(0.8),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    );
+                  }).toList(),
+            ),
+          ),
+          // Date at bottom left
           Positioned(
             bottom: 8,
             left: 16,
@@ -90,8 +117,10 @@ class NoteCard extends StatelessWidget {
               DateFormat(
                 'yyyy-MM-dd – kk:mm',
               ).format(note.createdAt ?? DateTime.now()),
+              fontSize: 12,
             ),
           ),
+          // Edit and Delete buttons at bottom right
           Positioned(
             bottom: 8,
             right: 16,
@@ -99,12 +128,12 @@ class NoteCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  icon: Icon(Icons.edit, color: Colors.white, size: 16),
+                  icon: const Icon(Icons.edit, color: Colors.white, size: 16),
                   onPressed: () => _editNoteDialog(context, ref, note),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 IconButton(
-                  icon: Icon(Icons.delete, color: Colors.white, size: 16),
+                  icon: const Icon(Icons.delete, color: Colors.white, size: 16),
                   onPressed: () => _deleteNote(ref, note.id),
                 ),
               ],

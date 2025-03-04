@@ -116,3 +116,7 @@ app.*.symbols
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
+android/app/.cxx/Debug/3z6b1t6y/arm64-v8a/configure_fingerprint.bin
+android/app/.cxx/Debug/3z6b1t6y/armeabi-v7a/configure_fingerprint.bin
+android/app/.cxx/Debug/3z6b1t6y/x86/configure_fingerprint.bin
+android/app/.cxx/Debug/3z6b1t6y/x86_64/configure_fingerprint.bin

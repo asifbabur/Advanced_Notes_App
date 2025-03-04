@@ -7,7 +7,7 @@ part of 'auth_provider.dart';
 // **************************************************************************
 
 String _$firebaseAuthDataSourceHash() =>
-    r'56739f3fc7a5268f95c3450044c1f83c42c6ca72';
+    r'95a0b0edd77b64b9889b799f7f261a1e504f76b6';
 
 /// See also [firebaseAuthDataSource].
 @ProviderFor(firebaseAuthDataSource)
@@ -26,11 +26,11 @@ final firebaseAuthDataSourceProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FirebaseAuthDataSourceRef = ProviderRef<FirebaseAuthDataSource>;
-String _$authRepositoryHash() => r'e2c0717ad1c32e17199a8654f4b5f2a34e9202d5';
+String _$authRepositoryHash() => r'e64ef17a8bbc4fbe2e35e4f07b005a70f9f544b5';
 
 /// See also [authRepository].
 @ProviderFor(authRepository)
-final authRepositoryProvider = Provider<AuthRepository>.internal(
+final authRepositoryProvider = Provider<AuthRepositoryImpl>.internal(
   authRepository,
   name: r'authRepositoryProvider',
   debugGetCreateSourceHash:
@@ -43,8 +43,8 @@ final authRepositoryProvider = Provider<AuthRepository>.internal(
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef AuthRepositoryRef = ProviderRef<AuthRepository>;
-String _$authStateHash() => r'a35ff41450850c7b269aeaa07d6a0402c8d63b67';
+typedef AuthRepositoryRef = ProviderRef<AuthRepositoryImpl>;
+String _$authStateHash() => r'8643f22b63216573dc53d83106782a4e18506dec';
 
 /// Expose the auth state as a stream of UserModel (or null if not signed in)
 ///
@@ -62,7 +62,7 @@ final authStateProvider = StreamProvider<UserModel?>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef AuthStateRef = StreamProviderRef<UserModel?>;
-String _$authControllerHash() => r'b959ceadb421a9975c0bd5d3f0838631522dbac8';
+String _$authControllerHash() => r'6efe3153d947b48aca5220aa3ac3365554ff32d6';
 
 /// Controller for performing authentication actions
 ///

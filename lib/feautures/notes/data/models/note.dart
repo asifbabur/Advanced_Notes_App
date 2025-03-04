@@ -10,6 +10,7 @@ abstract class Note with _$Note {
     required String title,
     required String content,
     DateTime? createdAt,
+    @Default([]) List<String> tags,
   }) = _Note;
 
   factory Note.fromJson(Map<String, dynamic> json) => _$NoteFromJson(json);

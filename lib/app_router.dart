@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_notes_flutter/common/bottom_nav_screen.dart';
 import 'package:my_notes_flutter/core/local_storage_manager.dart';
 import 'package:my_notes_flutter/feautures/auth/presentation/pages/auth_page.dart';
 import 'package:my_notes_flutter/feautures/auth/presentation/providers/auth_provider.dart';
-import 'package:my_notes_flutter/feautures/notes/presentation/pages/notes_page.dart';
 import 'package:my_notes_flutter/feautures/onboarding/presentation/onboarding_page.dart';
 
 class AppRouter {
@@ -24,7 +24,6 @@ class AppRouter {
             loading: () => false,
             error: (_, __) => false,
           );
-
           final isOnboardingComplete =
               ref.read(localStorageServiceProvider).isOnboardingComplete;
 
@@ -32,19 +31,16 @@ class AppRouter {
               state.uri.toString() != OnboardingPage.pagePath) {
             return OnboardingPage.pagePath;
           }
-
           if (!isLoggedIn &&
               state.uri.toString() != AuthPage.pagePath &&
               isOnboardingComplete) {
             return AuthPage.pagePath;
           }
-
           if (isLoggedIn &&
               (state.uri.toString() == AuthPage.pagePath ||
                   state.uri.toString() == OnboardingPage.pagePath)) {
-            return NotesPage.pagePath;
+            return MainScreen.pagePath;
           }
-
           return null;
         },
         routes: [
@@ -57,22 +53,18 @@ class AppRouter {
             builder: (context, state) => const AuthPage(),
           ),
           GoRoute(
-            path: NotesPage.pagePath,
-            builder: (context, state) => NotesPage(),
+            path: MainScreen.pagePath,
+            builder: (context, state) => const MainScreen(),
           ),
-
-          GoRoute(path: '/', builder: (context, state) => NotesPage()),
+          // Fallback route, redirect to MainScreen
+          GoRoute(path: '/', builder: (context, state) => const MainScreen()),
         ],
       );
 }
 
 class _AuthChangeNotifier extends ChangeNotifier {
   _AuthChangeNotifier(WidgetRef ref) {
-    ref.listen(authStateProvider, (_, __) {
-      notifyListeners();
-    });
-    ref.listen(localStorageServiceProvider, (_, __) {
-      notifyListeners();
-    });
+    ref.listen(authStateProvider, (_, __) => notifyListeners());
+    ref.listen(localStorageServiceProvider, (_, __) => notifyListeners());
   }
 }

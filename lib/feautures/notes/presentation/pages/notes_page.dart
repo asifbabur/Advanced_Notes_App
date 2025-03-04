@@ -6,18 +6,31 @@ import 'package:my_notes_flutter/feautures/notes/data/models/note.dart';
 import 'package:my_notes_flutter/feautures/notes/presentation/widgets/note_dialog.dart';
 import 'package:my_notes_flutter/feautures/notes/presentation/widgets/notes_list.dart';
 
-class NotesPage extends ConsumerWidget {
+class NotesPage extends ConsumerStatefulWidget {
   static const pageName = 'notes';
   static const pagePath = '/notes';
 
   const NotesPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final notesAsync = ref.watch(notesControllerProvider);
-    final RefreshController refreshController = RefreshController(
-      initialRefresh: false,
+  NotesPageState createState() => NotesPageState();
+}
+
+class NotesPageState extends ConsumerState<NotesPage> {
+  final RefreshController refreshController = RefreshController(
+    initialRefresh: false,
+  );
+
+  void addNewNote() {
+    showDialog(
+      context: context,
+      builder: (context) => AddEditNoteDialog(ref: ref, isEdit: false),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final notesAsync = ref.watch(notesControllerProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('My Notes')),
@@ -32,17 +45,6 @@ class NotesPage extends ConsumerWidget {
             () => const Center(child: CircularProgressIndicator.adaptive()),
         error: (err, _) => Center(child: Text('Error: $err')),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _addNoteDialog(context, ref),
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-
-  void _addNoteDialog(BuildContext context, WidgetRef ref) {
-    showDialog(
-      context: context,
-      builder: (context) => AddEditNoteDialog(ref: ref, isEdit: false),
     );
   }
 }
