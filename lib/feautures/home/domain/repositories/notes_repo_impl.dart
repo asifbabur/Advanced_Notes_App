@@ -1,7 +1,7 @@
-import 'package:my_notes_flutter/feautures/notes/data/models/note.dart';
-import 'package:my_notes_flutter/feautures/notes/data/source/notes_data_source.dart';
+import 'package:my_notes_flutter/feautures/home/data/models/note.dart';
+import 'package:my_notes_flutter/feautures/home/data/source/notes_data_source.dart';
 
-import '../../domain/repositories/notes_repository.dart';
+import 'notes_repository.dart';
 
 class NotesRepositoryImpl implements NotesRepository {
   final FirebaseNotesDataSource dataSource;

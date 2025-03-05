@@ -1,38 +1,33 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:my_notes_flutter/common/my_text.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_notes_flutter/core/constants.dart';
-import 'package:my_notes_flutter/feautures/notes/presentation/widgets/no_notes_widget.dart';
-import 'package:my_notes_flutter/feautures/notes/presentation/widgets/profile_header.dart';
-import 'package:my_notes_flutter/feautures/notes/presentation/widgets/recent_note.dart';
-import 'package:my_notes_flutter/feautures/notes/presentation/widgets/tags_scroll.dart';
+import 'package:my_notes_flutter/feautures/home/presentation/pages/notes_page.dart';
+import 'package:my_notes_flutter/feautures/home/presentation/widgets/no_notes_widget.dart';
+import 'package:my_notes_flutter/feautures/home/presentation/widgets/profile_header.dart';
+import 'package:my_notes_flutter/feautures/home/presentation/widgets/recent_note.dart';
+import 'package:my_notes_flutter/feautures/home/presentation/widgets/tags_scroll.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-import 'package:my_notes_flutter/feautures/notes/presentation/providers/notes_provider.dart';
-import 'package:my_notes_flutter/feautures/notes/presentation/widgets/note_dialog.dart';
-import 'package:my_notes_flutter/feautures/notes/presentation/widgets/notes_list.dart';
+import 'package:my_notes_flutter/feautures/home/presentation/providers/notes_provider.dart';
+import 'package:my_notes_flutter/feautures/home/presentation/widgets/notes_list.dart';
 
-class NotesPage extends ConsumerStatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   static const pageName = 'notes';
   static const pagePath = '/notes';
 
-  const NotesPage({super.key});
+  const HomePage({super.key});
 
   @override
-  NotesPageState createState() => NotesPageState();
+  HomePageState createState() => HomePageState();
 }
 
-class NotesPageState extends ConsumerState<NotesPage> {
+class HomePageState extends ConsumerState<HomePage> {
   final RefreshController refreshController = RefreshController(
     initialRefresh: false,
   );
 
   void addNewNote() {
-    showDialog(
-      context: context,
-      builder: (context) => AddEditNoteDialog(ref: ref, isEdit: false),
-    );
+    context.push(AddEditNotePage.pagePath, extra: {'isEdit': false});
   }
 
   @override

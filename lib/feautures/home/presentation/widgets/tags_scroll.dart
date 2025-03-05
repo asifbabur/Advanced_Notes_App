@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_notes_flutter/common/my_text.dart';
-import 'package:my_notes_flutter/feautures/notes/presentation/providers/notes_provider.dart';
+import 'package:my_notes_flutter/feautures/home/presentation/providers/notes_provider.dart';
 
 class TagsScroll extends ConsumerStatefulWidget {
   const TagsScroll({super.key});

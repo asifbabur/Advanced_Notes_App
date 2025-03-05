@@ -9,11 +9,12 @@ class MyTextFormField extends StatelessWidget {
   final IconData? prefixIcon;
   final String? Function(String?)? validator;
   final Function(String)? onChanged;
-
+  final int? maxLines;
   const MyTextFormField({
     super.key,
     required this.hintText,
     this.controller,
+    this.maxLines = 1,
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
     this.prefixIcon,
@@ -29,12 +30,17 @@ class MyTextFormField extends StatelessWidget {
       obscureText: obscureText,
       validator: validator,
       onChanged: onChanged,
+      maxLines: maxLines,
       style: GoogleFonts.openSans(fontSize: 16, color: Colors.black),
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: GoogleFonts.openSans(fontSize: 14, color: Colors.grey[600]),
-        prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: Colors.grey) : null,
-        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+        prefixIcon:
+            prefixIcon != null ? Icon(prefixIcon, color: Colors.grey) : null,
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 14,
+          horizontal: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: Colors.grey),

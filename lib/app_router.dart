@@ -5,7 +5,11 @@ import 'package:my_notes_flutter/common/bottom_nav_screen.dart';
 import 'package:my_notes_flutter/core/local_storage_manager.dart';
 import 'package:my_notes_flutter/feautures/auth/presentation/pages/auth_page.dart';
 import 'package:my_notes_flutter/feautures/auth/presentation/providers/auth_provider.dart';
+import 'package:my_notes_flutter/feautures/home/data/models/note.dart';
+import 'package:my_notes_flutter/feautures/home/presentation/pages/home_page.dart';
+import 'package:my_notes_flutter/feautures/home/presentation/pages/notes_page.dart';
 import 'package:my_notes_flutter/feautures/onboarding/presentation/onboarding_page.dart';
+import 'package:my_notes_flutter/feautures/profile/presentation/profile_screen.dart';
 
 class AppRouter {
   final GoRouter router;
@@ -17,6 +21,8 @@ class AppRouter {
             ref.read(localStorageServiceProvider).isOnboardingComplete
                 ? AuthPage.pagePath
                 : OnboardingPage.pagePath,
+
+        /// ✅ **Handle Redirection (Onboarding, Auth, and Main Navigation)**
         redirect: (context, state) {
           final authState = ref.read(authStateProvider);
           final isLoggedIn = authState.when(
@@ -26,38 +32,73 @@ class AppRouter {
           );
           final isOnboardingComplete =
               ref.read(localStorageServiceProvider).isOnboardingComplete;
+          final currentPath = state.uri.toString();
 
-          if (!isOnboardingComplete &&
-              state.uri.toString() != OnboardingPage.pagePath) {
+          if (!isOnboardingComplete && currentPath != OnboardingPage.pagePath) {
             return OnboardingPage.pagePath;
           }
           if (!isLoggedIn &&
-              state.uri.toString() != AuthPage.pagePath &&
+              currentPath != AuthPage.pagePath &&
               isOnboardingComplete) {
             return AuthPage.pagePath;
           }
           if (isLoggedIn &&
-              (state.uri.toString() == AuthPage.pagePath ||
-                  state.uri.toString() == OnboardingPage.pagePath)) {
-            return MainScreen.pagePath;
+              (currentPath == AuthPage.pagePath ||
+                  currentPath == OnboardingPage.pagePath)) {
+            return '/main/notes';
+          }
+          if (currentPath == '/main') {
+            return '/main/notes';
           }
           return null;
         },
+
         routes: [
           GoRoute(
             path: OnboardingPage.pagePath,
             builder: (context, state) => const OnboardingPage(),
           ),
+
           GoRoute(
             path: AuthPage.pagePath,
             builder: (context, state) => const AuthPage(),
           ),
+
           GoRoute(
-            path: MainScreen.pagePath,
-            builder: (context, state) => const MainScreen(),
+            path: AddEditNotePage.pagePath,
+            builder: (context, state) {
+              final args = state.extra as Map<String, dynamic>? ?? {};
+              return AddEditNotePage(
+                isEdit: args['isEdit'] ?? false,
+                note: args['note'] as Note?,
+              );
+            },
           ),
-          // Fallback route, redirect to MainScreen
-          GoRoute(path: '/', builder: (context, state) => const MainScreen()),
+
+          StatefulShellRoute.indexedStack(
+            builder: (context, state, navigationShell) {
+              return MainScreen(navigationShell: navigationShell);
+            },
+            branches: [
+              StatefulShellBranch(
+                routes: [
+                  GoRoute(
+                    path: '/main/notes',
+                    builder: (context, state) => const HomePage(),
+                  ),
+                ],
+              ),
+
+              StatefulShellBranch(
+                routes: [
+                  GoRoute(
+                    path: '/main/profile',
+                    builder: (context, state) => const ProfileScreen(),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ],
       );
 }

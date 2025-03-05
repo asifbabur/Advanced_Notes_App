@@ -1,4 +1,4 @@
-import 'package:my_notes_flutter/feautures/notes/data/models/note.dart';
+import 'package:my_notes_flutter/feautures/home/data/models/note.dart';
 
 abstract class NotesRepository {
   Future<void> createNote(Note note);

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:my_notes_flutter/common/my_text.dart';
-import 'package:my_notes_flutter/feautures/notes/data/models/note.dart';
-import 'package:my_notes_flutter/feautures/notes/presentation/providers/notes_provider.dart';
-import 'package:my_notes_flutter/feautures/notes/presentation/widgets/note_dialog.dart';
+import 'package:my_notes_flutter/feautures/home/data/models/note.dart';
+import 'package:my_notes_flutter/feautures/home/presentation/pages/notes_page.dart';
+import 'package:my_notes_flutter/feautures/home/presentation/providers/notes_provider.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class NotesList extends StatelessWidget {
@@ -127,7 +128,7 @@ class NoteCard extends StatelessWidget {
               children: [
                 IconButton(
                   icon: const Icon(Icons.edit, color: Colors.white, size: 16),
-                  onPressed: () => _editNoteDialog(context, ref, note),
+                  onPressed: () => _editNote(context, ref, note),
                 ),
                 const SizedBox(width: 8),
                 IconButton(
@@ -142,12 +143,13 @@ class NoteCard extends StatelessWidget {
     );
   }
 
-  void _editNoteDialog(BuildContext context, WidgetRef ref, Note note) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AddEditNoteDialog(ref: ref, note: note, isEdit: true),
-    );
+  void _editNote(BuildContext context, WidgetRef ref, Note note) {
+
+    context.push(
+  AddEditNotePage.pagePath,
+  extra: {'isEdit': true, 'note': note},
+);
+    
   }
 
   void _deleteNote(WidgetRef ref, String noteId) {
