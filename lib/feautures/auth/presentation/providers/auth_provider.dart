@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_notes_flutter/feautures/auth/data/repositories/auth_repo_impl.dart';
 import 'package:my_notes_flutter/feautures/auth/data/source/auth_data_source.dart';
-import 'package:my_notes_flutter/feautures/auth/domain/repositories/auth_repo.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../auth/data/models/user_model.dart';
@@ -26,30 +25,50 @@ Stream<UserModel?> authState(Ref ref) {
 }
 
 /// Controller for performing authentication actions
-@Riverpod()
+@Riverpod(keepAlive: true) // Keep the auth state alive across app lifecycle
 class AuthController extends _$AuthController {
   @override
-  FutureOr<void> build() {
-    // No initialization needed for now
+  Stream<UserModel?> build() {
+    final repo = ref.read(authRepositoryProvider);
+    return repo.user; // Listen to auth state changes
   }
 
-  Future<UserModel> signInWithEmail(String email, String password) async {
+  Future<void> signInWithEmail(String email, String password) async {
+    state = const AsyncValue.loading();
     final repo = ref.read(authRepositoryProvider);
-    return await repo.signInWithEmail(email, password);
+    try {
+      final user = await repo.signInWithEmail(email, password);
+      state = AsyncValue.data(user); // Update state
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+    }
   }
 
-  Future<UserModel> registerWithEmail(String email, String password) async {
+  Future<void> registerWithEmail(String email, String password) async {
+    state = const AsyncValue.loading();
     final repo = ref.read(authRepositoryProvider);
-    return await repo.registerWithEmailPassword(email, password);
+    try {
+      final user = await repo.registerWithEmailPassword(email, password);
+      state = AsyncValue.data(user);
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+    }
   }
 
-  Future<UserModel> signInWithGoogle() async {
+  Future<void> signInWithGoogle() async {
+    state = const AsyncValue.loading();
     final repo = ref.read(authRepositoryProvider);
-    return await repo.signInWithGoogle();
+    try {
+      final user = await repo.signInWithGoogle();
+      state = AsyncValue.data(user);
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+    }
   }
 
   Future<void> signOut() async {
     final repo = ref.read(authRepositoryProvider);
     await repo.signOut();
+    state = const AsyncValue.data(null); // Set state to null after sign out
   }
 }

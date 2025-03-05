@@ -62,14 +62,14 @@ final authStateProvider = StreamProvider<UserModel?>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef AuthStateRef = StreamProviderRef<UserModel?>;
-String _$authControllerHash() => r'6efe3153d947b48aca5220aa3ac3365554ff32d6';
+String _$authControllerHash() => r'428d7d740e08a7c65e82e20621928de9f94344a0';
 
 /// Controller for performing authentication actions
 ///
 /// Copied from [AuthController].
 @ProviderFor(AuthController)
 final authControllerProvider =
-    AutoDisposeAsyncNotifierProvider<AuthController, void>.internal(
+    StreamNotifierProvider<AuthController, UserModel?>.internal(
       AuthController.new,
       name: r'authControllerProvider',
       debugGetCreateSourceHash:
@@ -80,6 +80,6 @@ final authControllerProvider =
       allTransitiveDependencies: null,
     );
 
-typedef _$AuthController = AutoDisposeAsyncNotifier<void>;
+typedef _$AuthController = StreamNotifier<UserModel?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

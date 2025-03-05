@@ -12,14 +12,14 @@ class MyText extends StatelessWidget {
 
   const MyText(
     this.text, {
-    Key? key,
+    super.key,
     this.fontSize = 14.0,
     this.fontWeight = FontWeight.normal,
     this.color = Colors.black,
     this.textAlign = TextAlign.start,
     this.overflow = TextOverflow.ellipsis,
     this.maxLines = 1,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

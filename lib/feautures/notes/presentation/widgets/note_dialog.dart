@@ -14,8 +14,8 @@ class AddEditNoteDialog extends StatefulWidget {
     required this.ref,
     this.note,
     required this.isEdit,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _AddEditNoteDialogState createState() => _AddEditNoteDialogState();
@@ -69,6 +69,7 @@ class _AddEditNoteDialogState extends State<AddEditNoteDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      elevation: 0,
       title: MyText(
         widget.isEdit ? 'Edit Note' : 'Add Note',
         fontSize: 22,

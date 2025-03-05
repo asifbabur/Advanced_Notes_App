@@ -13,11 +13,11 @@ class NotesList extends StatelessWidget {
   final RefreshController refreshController;
 
   const NotesList({
-    Key? key,
+    super.key,
     required this.notes,
     required this.ref,
     required this.refreshController,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,6 @@ class NotesList extends StatelessWidget {
       child: ListView.separated(
         physics:
             AlwaysScrollableScrollPhysics(), // ensures pull-to-refresh even with few items
-        padding: const EdgeInsets.all(8),
         separatorBuilder: (context, index) => const SizedBox(height: 15),
         itemCount: notes.length,
         itemBuilder: (context, index) {
@@ -64,16 +63,15 @@ class NoteCard extends StatelessWidget {
   final WidgetRef ref;
 
   const NoteCard({
-    Key? key,
+    super.key,
     required this.note,
     required this.color,
     required this.ref,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(12),

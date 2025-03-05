@@ -23,18 +23,47 @@ NotesRepositoryImpl notesRepository(Ref ref) {
 final selectedCategoryProvider = StateProvider<String?>((ref) => null);
 
 // Provider to compute all distinct categories (tags) from your notes
-final categoriesProvider = Provider<List<String>>((ref) {
+final topTagsProvider = Provider<List<String>>((ref) {
   final notesAsync = ref.watch(notesControllerProvider);
+
   return notesAsync.when(
     data: (notes) {
-      final Set<String> allTags = {};
+      final Map<String, int> tagCount = {};
+
+      // Count occurrences of each tag
       for (final note in notes) {
-        allTags.addAll(note.tags);
+        for (final tag in note.tags) {
+          tagCount[tag] = (tagCount[tag] ?? 0) + 1;
+        }
       }
-      return allTags.toList();
+
+      // Sort tags by frequency and get the top 5-6
+      final topTags = tagCount.entries
+          .toList()
+          ..sort((a, b) => b.value.compareTo(a.value)); // Descending order
+
+      return topTags.take(6).map((e) => e.key).toList(); // Return top 6
     },
     loading: () => [],
     error: (_, __) => [],
+  );
+});
+
+// Provider to compute all distinct categories (tags) from your notes
+final recentNoteProvider = Provider<Note?>((ref) {
+  final notesAsync = ref.watch(notesControllerProvider);
+
+  return notesAsync.when(
+    data: (notes) {
+      if (notes.isEmpty) return null; // No notes, return null
+
+      // Sort notes by timestamp (assuming `createdAt` is a DateTime field)
+      notes.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+
+      return notes.first; // Most recent note
+    },
+    loading: () => null, // While loading, return null
+    error: (_, __) => null, // If error, return null
   );
 });
 
