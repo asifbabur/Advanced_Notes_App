@@ -33,8 +33,13 @@ class MyTextFormField extends StatelessWidget {
       maxLines: maxLines,
       style: GoogleFonts.openSans(fontSize: 16, color: Colors.black),
       decoration: InputDecoration(
+        fillColor: Colors.white,
+        filled: true,
         hintText: hintText,
-        hintStyle: GoogleFonts.openSans(fontSize: 14, color: Colors.grey[600]),
+        hintStyle: GoogleFonts.openSans(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+        ),
         prefixIcon:
             prefixIcon != null ? Icon(prefixIcon, color: Colors.grey) : null,
         contentPadding: const EdgeInsets.symmetric(
@@ -43,15 +48,16 @@ class MyTextFormField extends StatelessWidget {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.grey),
+          // borderSide: const BorderSide(color: Colors.grey),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide: BorderSide.none,
+          // borderSide: const BorderSide(color: Colors.grey),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.blue),
+          borderSide: const BorderSide(color: Colors.black),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
