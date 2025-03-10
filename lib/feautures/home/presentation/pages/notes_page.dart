@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:my_notes_flutter/common/my_button.dart';
 import 'package:my_notes_flutter/common/my_text.dart';
 import 'package:my_notes_flutter/common/my_textformfield.dart';
+import 'package:my_notes_flutter/core/constants.dart';
 import 'package:my_notes_flutter/feautures/home/data/models/note.dart';
 import 'package:my_notes_flutter/feautures/home/presentation/providers/notes_provider.dart';
 
@@ -25,6 +27,7 @@ class _AddEditNotePageState extends ConsumerState<AddEditNotePage> {
   late TextEditingController contentController;
   final TextEditingController tagController = TextEditingController();
   List<String> tags = [];
+  String selectedCategory = categories.first;
 
   @override
   void initState() {
@@ -37,6 +40,10 @@ class _AddEditNotePageState extends ConsumerState<AddEditNotePage> {
     );
     if (widget.isEdit && widget.note != null) {
       tags = List.from(widget.note!.tags);
+      selectedCategory =
+          widget.note!.category.isNotEmpty
+              ? widget.note!.category
+              : categories.first;
     }
   }
 
@@ -89,6 +96,7 @@ class _AddEditNotePageState extends ConsumerState<AddEditNotePage> {
                 content: content,
                 createdAt: DateTime.now(),
                 tags: tags,
+                category: selectedCategory,
               ),
             );
       } else {
@@ -101,10 +109,10 @@ class _AddEditNotePageState extends ConsumerState<AddEditNotePage> {
                 content: content,
                 createdAt: DateTime.now(),
                 tags: tags,
+                category: selectedCategory,
               ),
             );
       }
-
       Navigator.pop(context);
     }
   }
@@ -127,6 +135,7 @@ class _AddEditNotePageState extends ConsumerState<AddEditNotePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               MyTextFormField(
+                fillColor: Colors.grey.shade300,
                 hintText: 'Enter title',
                 controller: titleController,
                 validator:
@@ -135,12 +144,40 @@ class _AddEditNotePageState extends ConsumerState<AddEditNotePage> {
               ),
               const SizedBox(height: 12),
               MyTextFormField(
+                fillColor: Colors.grey.shade300,
+
                 hintText: 'Enter content',
                 maxLines: 5,
                 controller: contentController,
                 validator:
                     (value) =>
                         value!.trim().isEmpty ? 'Content is required' : null,
+              ),
+              const SizedBox(height: 12),
+              DropdownButtonFormField<String>(
+                value: selectedCategory,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey.shade300,
+                  labelText: 'Category',
+                  labelStyle: GoogleFonts.openSans(fontWeight: FontWeight.bold),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                items:
+                    categories.map((String category) {
+                      return DropdownMenuItem<String>(
+                        value: category,
+                        child: MyText(category, fontWeight: FontWeight.w600),
+                      );
+                    }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedCategory = value!;
+                  });
+                },
               ),
               const SizedBox(height: 12),
               MyText('Tags', fontSize: 16, fontWeight: FontWeight.w600),
@@ -161,6 +198,8 @@ class _AddEditNotePageState extends ConsumerState<AddEditNotePage> {
                 children: [
                   Expanded(
                     child: MyTextFormField(
+                      fillColor: Colors.grey.shade300,
+
                       hintText: 'Enter a tag',
                       controller: tagController,
                     ),

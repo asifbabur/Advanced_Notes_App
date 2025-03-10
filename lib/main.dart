@@ -4,6 +4,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_notes_flutter/core/local_storage_manager.dart';
@@ -15,6 +16,7 @@ void main() {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+
       final sharedPreferences = await SharedPreferences.getInstance();
 
       await Firebase.initializeApp(
@@ -30,16 +32,20 @@ void main() {
           details,
         ); // Optional: Show error in debug mode
       };
-      runApp(
-        ProviderScope(
-          overrides: [
-            localStorageServiceProvider.overrideWithValue(
-              LocalStorageManager(sharedPreferences),
-            ),
-          ],
-          child: MainApp(),
-        ),
-      );
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+      ]).then((_) {
+        runApp(
+          ProviderScope(
+            overrides: [
+              localStorageServiceProvider.overrideWithValue(
+                LocalStorageManager(sharedPreferences),
+              ),
+            ],
+            child: MainApp(),
+          ),
+        );
+      });
     },
     (error, stackTrace) {
       FirebaseAnalytics.instance.logEvent(

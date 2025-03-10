@@ -9,6 +9,7 @@ abstract class Note with _$Note {
     required String id,
     required String title,
     required String content,
+    required String category,
     DateTime? createdAt,
     @Default([]) List<String> tags,
   }) = _Note;

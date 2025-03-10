@@ -10,6 +10,7 @@ class MyTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final Function(String)? onChanged;
   final int? maxLines;
+  final Color? fillColor;
   const MyTextFormField({
     super.key,
     required this.hintText,
@@ -18,6 +19,7 @@ class MyTextFormField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
     this.prefixIcon,
+    this.fillColor,
     this.validator,
     this.onChanged,
   });
@@ -33,11 +35,12 @@ class MyTextFormField extends StatelessWidget {
       maxLines: maxLines,
       style: GoogleFonts.openSans(fontSize: 16, color: Colors.black),
       decoration: InputDecoration(
-        fillColor: Colors.white,
+        fillColor: fillColor ?? Colors.white,
         filled: true,
         hintText: hintText,
         hintStyle: GoogleFonts.openSans(
           fontSize: 14,
+          color: Colors.black,
           fontWeight: FontWeight.w600,
         ),
         prefixIcon:

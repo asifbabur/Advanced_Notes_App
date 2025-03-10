@@ -82,7 +82,7 @@ class MainScreen extends StatelessWidget {
                 shape: const CircleBorder(eccentricity: .32),
                 child: const Icon(
                   LineIcons.folderPlus,
-                  color: Colors.white,
+                  color: Colors.black,
                   size: 25,
                 ),
               ),

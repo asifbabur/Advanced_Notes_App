@@ -6,7 +6,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_notes_flutter/common/my_button.dart';
 import 'package:my_notes_flutter/common/my_text.dart';
 import 'package:my_notes_flutter/common/my_textformfield.dart';
 import 'package:line_icons/line_icons.dart';
@@ -26,6 +25,30 @@ class _AuthPageState extends ConsumerState<AuthPage>
     with SingleTickerProviderStateMixin {
   bool isLogin = true;
   bool isLoading = false;
+  double containerHeight = 550; // Default for Login
+  bool showForm = true; // Controls when the form is visible
+
+  void toggleAuthMode() {
+    setState(() {
+      showForm = false; // Temporarily hide form while animating height
+    });
+
+    Future.delayed(Duration(milliseconds: 20), () {
+      // Animate height first
+      setState(() {
+        isLogin = !isLogin;
+        containerHeight = isLogin ? 550 : 600;
+      });
+
+      // Wait for height animation before showing the form
+      Future.delayed(Duration(milliseconds: 300), () {
+        setState(() {
+          showForm =
+              true; // Now show the form and animate it with AnimatedSwitcher
+        });
+      });
+    });
+  }
 
   @override
   void initState() {
@@ -58,8 +81,10 @@ class _AuthPageState extends ConsumerState<AuthPage>
             ),
           ),
           Center(
-            child: Container(
-              height: 600,
+            child: AnimatedContainer(
+              duration: Durations.medium1,
+
+              height: containerHeight,
               padding: EdgeInsets.all(16),
               margin: EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
@@ -78,10 +103,10 @@ class _AuthPageState extends ConsumerState<AuthPage>
                       children: <Widget>[
                         MyText(
                           'Be',
-                          fontSize: 25.0,
+                          fontSize: 27.0,
                           fontWeight: FontWeight.w600,
                         ),
-                        SizedBox(width: 5),
+                        SizedBox(width: 2),
                         SizedBox(
                           width: 180,
                           height: 130, // Set a fixed width to prevent shifting
@@ -91,9 +116,10 @@ class _AuthPageState extends ConsumerState<AuthPage>
                             textHeightBehavior: TextHeightBehavior(
                               applyHeightToFirstAscent: false,
                             ),
-                            style: GoogleFonts.aDLaMDisplay(
-                              fontSize: 25,
-                              fontWeight: FontWeight.w600,
+                            style: GoogleFonts.waitingForTheSunrise(
+                              fontSize: 27,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.bold,
                             ),
                             child: AnimatedTextKit(
                               repeatForever: true,
@@ -155,40 +181,32 @@ class _AuthPageState extends ConsumerState<AuthPage>
                     ],
                     selected: {isLogin ? 0 : 1},
                     onSelectionChanged: (Set<int> newSelection) {
-                      setState(() {
-                        isLogin = newSelection.first == 0;
-                      });
+                      toggleAuthMode();
                     },
                   ),
                   16.height,
                   Divider(color: Colors.black.withValues(alpha: .35)),
                   16.height,
                   AnimatedSwitcher(
-                    duration: Duration(milliseconds: 350),
+                    duration: Duration(milliseconds: 100),
                     transitionBuilder: (
                       Widget child,
                       Animation<double> animation,
                     ) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: SlideTransition(
-                          position: Tween<Offset>(
-                            begin: Offset(1, .1),
-                            end: Offset.zero,
-                          ).animate(
-                            CurvedAnimation(
-                              parent: animation,
-                              curve: Curves.easeInCubic,
-                            ),
-                          ),
-                          child: child,
-                        ),
+                      return ScaleTransition(
+                        scale: Tween<double>(
+                          begin: 0.3,
+                          end: 1.0,
+                        ).animate(animation),
+                        child: FadeTransition(opacity: animation, child: child),
                       );
                     },
                     child:
-                        isLogin
-                            ? _buildLoginForm(context, ref)
-                            : _buildRegisterForm(context, ref),
+                        showForm
+                            ? (isLogin
+                                ? _buildLoginForm(context, ref)
+                                : _buildRegisterForm(context, ref))
+                            : SizedBox(), // Hide form before transition
                   ),
                 ],
               ),

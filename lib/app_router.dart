@@ -22,7 +22,6 @@ class AppRouter {
                 ? AuthPage.pagePath
                 : OnboardingPage.pagePath,
 
-        /// ✅ **Handle Redirection (Onboarding, Auth, and Main Navigation)**
         redirect: (context, state) {
           final authState = ref.read(authStateProvider);
           final isLoggedIn = authState.when(

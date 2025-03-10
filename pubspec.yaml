@@ -28,6 +28,7 @@ dependencies:
   line_icons: ^2.0.3
   flutter_platform_widgets: ^8.0.0
   animated_text_kit: ^4.2.3
+  searchfield: ^1.2.4
 
 dev_dependencies:
   flutter_test:

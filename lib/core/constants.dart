@@ -10,3 +10,12 @@ extension size on int {
   SizedBox get height => SizedBox(height: toDouble());
   SizedBox get width => SizedBox(width: toDouble());
 }
+
+const List<String> categories = [
+  "All",
+  "Work",
+  "Home",
+  "Personal",
+  "Ideas",
+  "Other",
+];
