@@ -29,6 +29,8 @@ dependencies:
   flutter_platform_widgets: ^8.0.0
   animated_text_kit: ^4.2.3
   searchfield: ^1.2.4
+  firebase_messaging: ^15.2.4
+  flutter_local_notifications: ^18.0.1
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_notes_flutter/feautures/home/data/models/note.dart';
 import 'package:my_notes_flutter/feautures/home/data/source/notes_data_source.dart';
 
@@ -10,12 +11,12 @@ class NotesRepositoryImpl implements NotesRepository {
 
   @override
   Future<void> createNote(Note note) async {
-    await dataSource.createNote(note);
+    await dataSource.createNote(FirebaseAuth.instance.currentUser!.uid, note);
   }
 
   @override
   Stream<List<Note>> getNotes() {
-    return dataSource.getNotesStream();
+    return dataSource.getNotesStream(FirebaseAuth.instance.currentUser!.uid);
   }
 
   @override
@@ -26,5 +27,10 @@ class NotesRepositoryImpl implements NotesRepository {
   @override
   Future<void> deleteNote(String noteId) async {
     await dataSource.deleteNote(noteId);
+  }
+
+  @override
+  Future<void> shareNote(Note note, String email) async {
+    await dataSource.shareNoteWithUser(note, email);
   }
 }

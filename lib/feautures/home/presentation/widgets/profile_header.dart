@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:my_notes_flutter/common/my_text.dart';
 import 'package:my_notes_flutter/core/constants.dart';
 import 'package:my_notes_flutter/feautures/auth/presentation/providers/auth_provider.dart';
+import 'package:my_notes_flutter/feautures/notifications/presentation/pages/notification_screen.dart';
 
 class ProfileHeader extends ConsumerStatefulWidget {
   const ProfileHeader({super.key});
@@ -43,7 +45,7 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
                 style: ButtonStyle(),
                 icon: Icon(LineIcons.bell, color: Colors.white),
                 onPressed: () {
-                  ref.read(authControllerProvider.notifier).signOut();
+                  context.pushNamed(NotificationScreen.pageName);
                 },
               ),
             ),

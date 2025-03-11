@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
@@ -57,7 +58,7 @@ class NoteCard extends StatelessWidget {
                     } else if (value == 'delete') {
                       _deleteNote(ref, note.id);
                     } else if (value == 'share') {
-                      _shareNote(ref, note.id);
+                      _shareNote(ref, note, context);
                     }
                   },
                   itemBuilder:
@@ -115,7 +116,77 @@ class NoteCard extends StatelessWidget {
     ref.read(notesControllerProvider.notifier).deleteNote(noteId);
   }
 
-  void _shareNote(WidgetRef ref, String noteId) {
-    ref.read(notesControllerProvider.notifier).deleteNote(noteId);
+  void _shareNote(WidgetRef ref, Note note, BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        final TextEditingController emailController = TextEditingController();
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(
+            'Share Note',
+            style: GoogleFonts.openSans(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email Address',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Cancel',
+                style: GoogleFonts.openSans(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final email = emailController.text;
+                if (email.isNotEmpty) {
+                  ref
+                      .read(notesControllerProvider.notifier)
+                      .shareNote(note, email);
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Email invitation has been sent')),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.greenButtonColor,
+                foregroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text(
+                'Share',
+                style: GoogleFonts.openSans(fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

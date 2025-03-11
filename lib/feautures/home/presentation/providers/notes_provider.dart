@@ -38,9 +38,9 @@ final topTagsProvider = Provider<List<String>>((ref) {
       }
 
       // Sort tags by frequency and get the top 5-6
-      final topTags = tagCount.entries
-          .toList()
-          ..sort((a, b) => b.value.compareTo(a.value)); // Descending order
+      final topTags =
+          tagCount.entries.toList()
+            ..sort((a, b) => b.value.compareTo(a.value)); // Descending order
 
       return topTags.take(6).map((e) => e.key).toList(); // Return top 6
     },
@@ -105,6 +105,14 @@ class NotesController extends _$NotesController {
   // Method to delete a note
   Future<void> deleteNote(String noteId) async {
     await ref.read(notesRepositoryProvider).deleteNote(noteId);
+    state = AsyncValue.data(
+      await ref.read(notesRepositoryProvider).getNotes().first,
+    );
+  }
+
+  // Method to delete a note
+  Future<void> shareNote(Note note, String email) async {
+    await ref.read(notesRepositoryProvider).shareNote(note, email);
     state = AsyncValue.data(
       await ref.read(notesRepositoryProvider).getNotes().first,
     );

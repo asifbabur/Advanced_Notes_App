@@ -8,6 +8,7 @@ import 'package:my_notes_flutter/feautures/auth/presentation/providers/auth_prov
 import 'package:my_notes_flutter/feautures/home/data/models/note.dart';
 import 'package:my_notes_flutter/feautures/home/presentation/pages/home_page.dart';
 import 'package:my_notes_flutter/feautures/home/presentation/pages/notes_page.dart';
+import 'package:my_notes_flutter/feautures/notifications/presentation/pages/notification_screen.dart';
 import 'package:my_notes_flutter/feautures/onboarding/presentation/onboarding_page.dart';
 import 'package:my_notes_flutter/feautures/profile/presentation/profile_screen.dart';
 
@@ -55,14 +56,19 @@ class AppRouter {
         routes: [
           GoRoute(
             path: OnboardingPage.pagePath,
+
             builder: (context, state) => const OnboardingPage(),
           ),
 
           GoRoute(
+            path: NotificationScreen.pagePath,
+            name: NotificationScreen.pageName, // Add a name
+            builder: (context, state) => NotificationScreen(),
+          ),
+          GoRoute(
             path: AuthPage.pagePath,
             builder: (context, state) => const AuthPage(),
           ),
-
           GoRoute(
             path: AddEditNotePage.pagePath,
             builder: (context, state) {

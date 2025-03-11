@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:my_notes_flutter/common/my_text.dart';
 import 'package:my_notes_flutter/core/constants.dart';
 import 'package:my_notes_flutter/feautures/home/data/models/note.dart';
-import 'package:my_notes_flutter/feautures/home/presentation/pages/notes_page.dart';
 import 'package:my_notes_flutter/feautures/home/presentation/providers/notes_provider.dart';
 import 'package:my_notes_flutter/feautures/home/presentation/widgets/note_card.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -78,7 +75,7 @@ class _NotesPageState extends ConsumerState<NotesPage>
                             margin: EdgeInsets.all(5),
                             padding: const EdgeInsets.symmetric(
                               vertical: 10,
-                              horizontal: 25,
+                              horizontal: 24,
                             ),
                             clipBehavior: Clip.antiAliasWithSaveLayer,
                             decoration: BoxDecoration(

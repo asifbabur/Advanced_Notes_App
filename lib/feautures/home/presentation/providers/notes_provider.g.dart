@@ -44,7 +44,7 @@ final notesRepositoryProvider = Provider<NotesRepositoryImpl>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef NotesRepositoryRef = ProviderRef<NotesRepositoryImpl>;
-String _$notesControllerHash() => r'a285c9d760299d3ede0afa02c3361bc134112278';
+String _$notesControllerHash() => r'c0f658d8fd30c0c4fd8e6ad1c550736c0f58c7c2';
 
 /// See also [NotesController].
 @ProviderFor(NotesController)
