@@ -6,86 +6,82 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'notes_provider.g.dart';
 
-// Provider for the FirebaseNotesDataSource
 @Riverpod(keepAlive: true)
 FirebaseNotesDataSource firebaseNotesDataSource(Ref ref) {
   return FirebaseNotesDataSource();
 }
 
-// Provider for the NotesRepository
 @Riverpod(keepAlive: true)
 NotesRepositoryImpl notesRepository(Ref ref) {
   final dataSource = ref.watch(firebaseNotesDataSourceProvider);
   return NotesRepositoryImpl(dataSource: dataSource);
 }
 
-// Provider to hold the currently selected category (or null for no filter)
-final selectedCategoryProvider = StateProvider<String?>((ref) => null);
+// // Provider to hold the currently selected category (or null for no filter)
+// final selectedCategoryProvider = StateProvider<String?>((ref) => null);
 
-// Provider to compute all distinct categories (tags) from your notes
-final topTagsProvider = Provider<List<String>>((ref) {
-  final notesAsync = ref.watch(notesControllerProvider);
+// // Provider to compute all distinct categories (tags) from your notes
+// final topTagsProvider = Provider<List<String>>((ref) {
+//   final notesAsync = ref.watch(notesControllerProvider);
 
-  return notesAsync.when(
-    data: (notes) {
-      final Map<String, int> tagCount = {};
+//   return notesAsync.when(
+//     data: (notes) {
+//       final Map<String, int> tagCount = {};
 
-      // Count occurrences of each tag
-      for (final note in notes) {
-        for (final tag in note.tags) {
-          tagCount[tag] = (tagCount[tag] ?? 0) + 1;
-        }
-      }
+//       // Count occurrences of each tag
+//       for (final note in notes) {
+//         for (final tag in note.tags) {
+//           tagCount[tag] = (tagCount[tag] ?? 0) + 1;
+//         }
+//       }
 
-      // Sort tags by frequency and get the top 5-6
-      final topTags =
-          tagCount.entries.toList()
-            ..sort((a, b) => b.value.compareTo(a.value)); // Descending order
+//       // Sort tags by frequency and get the top 5-6
+//       final topTags =
+//           tagCount.entries.toList()
+//             ..sort((a, b) => b.value.compareTo(a.value)); // Descending order
 
-      return topTags.take(6).map((e) => e.key).toList(); // Return top 6
-    },
-    loading: () => [],
-    error: (_, __) => [],
-  );
-});
+//       return topTags.take(6).map((e) => e.key).toList(); // Return top 6
+//     },
+//     loading: () => [],
+//     error: (_, __) => [],
+//   );
+// });
 
-// Provider to compute all distinct categories (tags) from your notes
-final recentNoteProvider = Provider<Note?>((ref) {
-  final notesAsync = ref.watch(notesControllerProvider);
+// // Provider to compute all distinct categories (tags) from your notes
+// final recentNoteProvider = Provider<Note?>((ref) {
+//   final notesAsync = ref.watch(notesControllerProvider);
 
-  return notesAsync.when(
-    data: (notes) {
-      if (notes.isEmpty) return null; // No notes, return null
+// //   return notesAsync.when(
+// //     data: (notes) {
+// //       if (notes.isEmpty) return null; // No notes, return null
 
-      // Sort notes by timestamp (assuming `createdAt` is a DateTime field)
-      notes.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+// //       // Sort notes by timestamp (assuming `createdAt` is a DateTime field)
+// //       notes.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
 
-      return notes.first; // Most recent note
-    },
-    loading: () => null, // While loading, return null
-    error: (_, __) => null, // If error, return null
-  );
-});
+// //       return notes.first; // Most recent note
+// //     },
+// //     loading: () => null, // While loading, return null
+// //     error: (_, __) => null, // If error, return null
+// //   );
+// // });
 
-// Provider to filter notes based on the selected category
-final filteredNotesProvider = Provider<List<Note>>((ref) {
-  final notes = ref
-      .watch(notesControllerProvider)
-      .maybeWhen(data: (notes) => notes, orElse: () => <Note>[]);
-  final selectedCategory = ref.watch(selectedCategoryProvider);
-  if (selectedCategory == null) return notes;
-  return notes.where((note) => note.tags.contains(selectedCategory)).toList();
-});
+// // Provider to filter notes based on the selected category
+// final filteredNotesProvider = Provider<List<Note>>((ref) {
+//   final notes = ref
+//       .watch(notesControllerProvider)
+//       .maybeWhen(data: (notes) => notes, orElse: () => <Note>[]);
+//   final selectedCategory = ref.watch(selectedCategoryProvider);
+//   if (selectedCategory == null) return notes;
+//   return notes.where((note) => note.tags.contains(selectedCategory)).toList();
+// });
 
 // AsyncNotifier for managing the notes list (fetching, updating state, etc.)
 @Riverpod(keepAlive: true)
 class NotesController extends _$NotesController {
   @override
-  FutureOr<List<Note>> build() async {
-    // Initially load notes
-    return await ref.read(notesRepositoryProvider).getNotes().first;
+  Stream<List<Note>> build() {
+    return ref.read(notesRepositoryProvider).getNotes();
   }
-
   // Method to add a new note
   Future<void> addNote(Note note) async {
     await ref.read(notesRepositoryProvider).createNote(note);

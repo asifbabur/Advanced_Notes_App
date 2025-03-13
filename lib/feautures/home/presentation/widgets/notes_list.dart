@@ -39,7 +39,7 @@ class _NotesPageState extends ConsumerState<NotesPage>
         .watch(notesControllerProvider)
         .maybeWhen<List<Note>>(data: (data) => data, orElse: () => []);
 
-    return SmartRefresher(
+    return SmartRefresher( 
       controller: _refreshController,
       enablePullDown: true,
       header: WaterDropHeader(),

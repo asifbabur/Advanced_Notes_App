@@ -44,12 +44,12 @@ final notesRepositoryProvider = Provider<NotesRepositoryImpl>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef NotesRepositoryRef = ProviderRef<NotesRepositoryImpl>;
-String _$notesControllerHash() => r'c0f658d8fd30c0c4fd8e6ad1c550736c0f58c7c2';
+String _$notesControllerHash() => r'448cf1705114578f1a2093194bbcea1b14c7c450';
 
 /// See also [NotesController].
 @ProviderFor(NotesController)
 final notesControllerProvider =
-    AsyncNotifierProvider<NotesController, List<Note>>.internal(
+    StreamNotifierProvider<NotesController, List<Note>>.internal(
       NotesController.new,
       name: r'notesControllerProvider',
       debugGetCreateSourceHash:
@@ -60,6 +60,6 @@ final notesControllerProvider =
       allTransitiveDependencies: null,
     );
 
-typedef _$NotesController = AsyncNotifier<List<Note>>;
+typedef _$NotesController = StreamNotifier<List<Note>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

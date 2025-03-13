@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:my_notes_flutter/feautures/home/presentation/providers/notes_provider.dart';
 import 'package:my_notes_flutter/feautures/notifications/presentation/providers/notification_provider.dart';
 
 class NotificationScreen extends ConsumerWidget {
   static const pageName = 'notification_screen';
   static const pagePath = '/notification_screen';
+
+  const NotificationScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,7 +34,37 @@ class NotificationScreen extends ConsumerWidget {
                 onTap: () {
                   ref
                       .read(notificationControllerProvider.notifier)
-                      .markAsRead(notification.noteId);
+                      .markAsRead(notification.notificationId);
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("Accept Invitation"),
+                        content: Text(
+                          "Do you want to accept this note invitation?",
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text("Cancel"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              ref
+                                  .read(notificationControllerProvider.notifier)
+                                  .acceptInvitation(notification.noteId);
+
+                              ref.invalidate(notesControllerProvider);
+                              Navigator.of(context).pop();
+                            },
+                            child: Text("Accept"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
               );
             },

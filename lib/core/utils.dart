@@ -12,7 +12,7 @@ class Notifications {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  Notifications() {}
+  Notifications();
 
   void setupFirebaseMessaging() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -118,10 +118,7 @@ class Notifications {
               final noteTitle = change.doc["title"] ?? "Untitled Note";
               final noteId = change.doc.id;
 
-              // Save notification in Firestore
-              ref
-                  .read(notificationRepositoryProvider)
-                  .saveNotificationToFirestore(noteTitle, noteId);
+           
               showLocalNotification(noteTitle);
               sendPushNotification(noteTitle);
             }

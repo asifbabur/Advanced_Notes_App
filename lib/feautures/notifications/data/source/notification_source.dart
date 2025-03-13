@@ -27,4 +27,13 @@ class NotificationController extends StateNotifier<AsyncValue<void>> {
       print("Error marking notification as read: $e");
     }
   }
+
+   // Mark a notification as read
+  Future<void> acceptInvitation(String noteId) async {
+    try {
+      await _repository.addCurrentUserToSharedWith(noteId);
+    } catch (e) {
+      print("Error marking notification as read: $e");
+    }
+  }
 }

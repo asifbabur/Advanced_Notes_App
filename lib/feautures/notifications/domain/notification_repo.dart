@@ -47,6 +47,7 @@ class NotificationRepository {
             .toList());
   }
 
+
   // Mark a notification as read
   Future<void> markAsRead(String notificationId) async {
     await _firestore
@@ -55,5 +56,12 @@ class NotificationRepository {
         .collection("notifications")
         .doc(notificationId)
         .update({'isRead': true});
+  }
+
+    Future<void> addCurrentUserToSharedWith(String noteId) async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    await _firestore.collection("notes").doc(noteId).update({
+      "sharedWith": FieldValue.arrayUnion([userId])
+    });
   }
 }

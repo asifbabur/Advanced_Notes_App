@@ -4,12 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icon.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:my_notes_flutter/common/my_text.dart';
 import 'package:my_notes_flutter/core/constants.dart';
 import 'package:my_notes_flutter/feautures/home/data/models/note.dart';
 import 'package:my_notes_flutter/feautures/home/presentation/pages/notes_page.dart';
 import 'package:my_notes_flutter/feautures/home/presentation/providers/notes_provider.dart';
+import 'package:my_notes_flutter/feautures/notifications/presentation/providers/notification_provider.dart';
 
 class NoteCard extends StatelessWidget {
   final Note note;
@@ -23,7 +23,7 @@ class NoteCard extends StatelessWidget {
       onTap: () => _editNote(context, ref, note),
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.greenButtonColor,
+          color: note.isOwner ? AppColors.greenButtonColor : Colors.amberAccent,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -166,6 +166,11 @@ class NoteCard extends StatelessWidget {
                   ref
                       .read(notesControllerProvider.notifier)
                       .shareNote(note, email);
+
+                  // Save notification in Firestore
+                  ref
+                      .read(notificationRepositoryProvider)
+                      .saveNotificationToFirestore(note.title, note.id);
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Email invitation has been sent')),

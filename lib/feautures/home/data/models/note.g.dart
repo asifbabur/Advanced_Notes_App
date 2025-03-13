@@ -8,6 +8,7 @@ part of 'note.dart';
 
 _Note _$NoteFromJson(Map<String, dynamic> json) => _Note(
   id: json['id'] as String,
+  ownerId: json['ownerId'] as String?,
   title: json['title'] as String,
   content: json['content'] as String,
   category: json['category'] as String,
@@ -18,13 +19,20 @@ _Note _$NoteFromJson(Map<String, dynamic> json) => _Note(
   tags:
       (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
       const [],
+  sharedWith:
+      (json['sharedWith'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList() ??
+      const [],
 );
 
 Map<String, dynamic> _$NoteToJson(_Note instance) => <String, dynamic>{
   'id': instance.id,
+  'ownerId': instance.ownerId,
   'title': instance.title,
   'content': instance.content,
   'category': instance.category,
   'createdAt': instance.createdAt?.toIso8601String(),
   'tags': instance.tags,
+  'sharedWith': instance.sharedWith,
 };

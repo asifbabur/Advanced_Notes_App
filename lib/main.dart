@@ -25,9 +25,9 @@ void main() {
         options: DefaultFirebaseOptions.currentPlatform,
       );
 
-      final Notifications _notifications = Notifications();
+      final Notifications notifications = Notifications();
 
-      await _notifications.initialize();
+      await notifications.initialize();
 
       // Global error handler
       FlutterError.onError = (FlutterErrorDetails details) {
@@ -64,7 +64,7 @@ void main() {
 }
 
 class MainApp extends ConsumerStatefulWidget {
-  MainApp({super.key});
+  const MainApp({super.key});
 
   @override
   ConsumerState<MainApp> createState() => _MainAppState();
